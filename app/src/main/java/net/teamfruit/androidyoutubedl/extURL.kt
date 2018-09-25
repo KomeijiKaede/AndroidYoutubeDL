@@ -10,6 +10,9 @@ tailrec suspend fun getCodecsURL(inputURL:String):String {
         val connect = "http://www.youtube.com/get_video_info?video_id=$videoID".httpGet().response().toString()
         return@async URLDecoder.decode(URLDecoder.decode(connect)).replace("%2C",",").replace("%2F", "/").replace("+", " ")
     }.await()
+    val opus = Regex("""codecs=\"opus\"""")
+    val vorbis = Regex("""codecs=\"vorbis\"""")
+    if(!opus.containsMatchIn(getVideoInfo) || !vorbis.containsMatchIn(getVideoInfo)) return "audioURL not found"
     val codecsList:MutableList<String> = getVideoInfo.split(";").toMutableList()
     var codecsUrl:String? = null
     loop@for(list in codecsList) {
@@ -29,6 +32,7 @@ tailrec suspend fun getCodecsURL(inputURL:String):String {
 }
 tailrec suspend fun statusCheck(inputURL: String):String {
     val codecsURL = getCodecsURL(inputURL)
+    if(codecsURL == "audioURL not found") return "audioURL not found"
     val status = codecsURL.httpGet().response().second.statusCode
     return when(status) {
         200 -> { codecsURL }
