@@ -2,6 +2,7 @@ package net.teamfruit.androidyoutubedl
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
@@ -30,5 +31,14 @@ class MainActivity : AppCompatActivity() {
         launch {
             textView.text = statusCheck(inputURL)
         }.join()
+    }
+}
+
+class TestActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_test)
+
+
     }
 }

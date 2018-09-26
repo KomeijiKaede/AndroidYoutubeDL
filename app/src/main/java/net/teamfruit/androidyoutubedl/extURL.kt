@@ -31,12 +31,13 @@ tailrec suspend fun getCodecsURL(inputURL:String):String {
     return codecsUrl ?: getCodecsURL(inputURL)
 }
 tailrec suspend fun statusCheck(inputURL: String):String {
-    val codecsURL = getCodecsURL(inputURL)
-    if(codecsURL == "audioURL not found") return "audioURL not found"
-    val status = codecsURL.httpGet().response().second.statusCode
-    return when(status) {
-        200 -> { codecsURL }
-        403 -> { statusCheck(inputURL) }
-        else -> { statusCheck(inputURL) }
-    }
+    val co = async {
+        val url = getCodecsURL(inputURL)
+        when(url.httpGet().response().second.statusCode) {
+            200 -> {return@async url}
+            else -> {return@async null}
+        }
+    }.await()
+    for(i in 0..5) if(co != null) return co
+    return statusCheck(inputURL)
 }
