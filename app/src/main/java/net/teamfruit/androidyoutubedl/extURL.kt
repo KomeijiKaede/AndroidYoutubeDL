@@ -4,7 +4,7 @@ import com.github.kittinunf.fuel.httpGet
 import kotlinx.coroutines.experimental.async
 import java.net.URLDecoder
 
-tailrec suspend fun getCodecsURL(inputURL:String):String {
+suspend fun getVideoInfo(inputURL: String):String {
     val getVideoInfo = async {
         val videoID = Regex("""v=[\d\p{Upper}\p{Lower}_\-]{11}""").find(inputURL)?.value?.substring(2..12)
         val connect = "http://www.youtube.com/get_video_info?video_id=$videoID".httpGet().response().toString()
@@ -13,7 +13,11 @@ tailrec suspend fun getCodecsURL(inputURL:String):String {
     val opus = Regex("""codecs=\"opus\"""")
     val vorbis = Regex("""codecs=\"vorbis\"""")
     if(!opus.containsMatchIn(getVideoInfo) || !vorbis.containsMatchIn(getVideoInfo)) return "audioURL not found"
-    val codecsList:MutableList<String> = getVideoInfo.split(";").toMutableList()
+    return getVideoInfo
+}
+tailrec suspend fun getCodecsURL(inputURL:String):String {
+    val videoInfo = getVideoInfo(inputURL)
+    val codecsList:MutableList<String> = videoInfo.split(";").toMutableList()
     var codecsUrl:String? = null
     loop@for(list in codecsList) {
         when {
