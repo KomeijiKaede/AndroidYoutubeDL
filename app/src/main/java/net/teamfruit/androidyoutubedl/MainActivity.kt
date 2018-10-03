@@ -4,6 +4,8 @@ import android.media.MediaPlayer
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.view.MotionEvent
 import android.widget.SeekBar
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_audioplay.*
@@ -15,6 +17,8 @@ import kotlinx.coroutines.experimental.launch
 class MainActivity : AppCompatActivity() {
     private var audioUrl:String? = null
     private val mp = MediaPlayer()
+    private lateinit var runnable:Runnable
+    private var handler: Handler = Handler()
     private var job: Deferred<Unit>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,8 +41,7 @@ class MainActivity : AppCompatActivity() {
                     mp.setDataSource(audioUrl)
                     mp.prepare()
                     mp.start()
-                    seekBar.max = mp.duration
-                    seekBar.progress = mp.currentPosition
+                    initSeekBar()
                 }
             }
         }
@@ -65,9 +68,10 @@ class MainActivity : AppCompatActivity() {
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                mp.seekTo(progress)
-                currentTime.text = mToS(mp.currentPosition)
-                textView3.text = progress.toString()
+                if(fromUser) {
+                    mp.seekTo(progress)
+                    currentTime.text = mToS(progress)
+                }
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
             }
@@ -82,5 +86,16 @@ class MainActivity : AppCompatActivity() {
         val min = toSec / 60
         val sec = toSec % 60
         return "$min:$sec"
+    }
+
+    private fun initSeekBar() {
+        seekBar.max = mp.duration
+
+        runnable = Runnable {
+            seekBar.progress = mp.currentPosition
+            currentTime.text = mToS(mp.currentPosition)
+            handler.postDelayed(runnable, 100)
+        }
+        handler.postDelayed(runnable, 100)
     }
 }
