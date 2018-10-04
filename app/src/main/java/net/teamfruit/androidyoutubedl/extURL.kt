@@ -17,8 +17,8 @@ suspend fun getVideoInfo(inputURL: String):String {
 }
 
 suspend fun getVideoTitle(inputURL: String):String {
-    val info = Regex(""",\"""").split(getVideoInfo(inputURL))
     return async {
+        val info = Regex(""",\"""").split(getVideoInfo(inputURL))
         for(list in info) {
             when {
                 Regex("""title\":""").containsMatchIn(list) -> return@async list.substring(Regex("""title\":\"""").find(list)?.range?.last!!).substring(1 until list.length-8)

@@ -33,9 +33,9 @@ class MainActivity : AppCompatActivity() {
                 audioUrl = null
                 textView2.text = ""
                 job = async(UI) {
+                    textView3.text = getVideoTitle(youtubeUrl)
                     if (audioUrl != null) launch { mp.reset() }.join()
                     audioUrl = getUrlTask(youtubeUrl)
-                    textView3.text = getVideoTitle(youtubeUrl)
                     textView2.text = audioUrl
                     mp.setDataSource(audioUrl)
                     mp.prepare()
