@@ -15,6 +15,20 @@ suspend fun getVideoInfo(inputURL: String):String {
     if(!opus.containsMatchIn(getVideoInfo) || !vorbis.containsMatchIn(getVideoInfo)) return "audioURL not found"
     return getVideoInfo
 }
+
+suspend fun getVideoTitle(inputURL: String):String {
+    val info = Regex(""",\"""").split(getVideoInfo(inputURL))
+    return async {
+        for(list in info) {
+            when {
+                Regex("""title\":""").containsMatchIn(list) -> return@async list.substring(Regex("""title\":\"""").find(list)?.range?.last!!).substring(1 until list.length-8)
+                else ->{}
+            }
+        }
+        return@async "not found"
+    }.await()
+}
+
 tailrec suspend fun getCodecsURL(inputURL:String):String {
     val videoInfo = getVideoInfo(inputURL)
     val codecsList:MutableList<String> = videoInfo.split(";").toMutableList()
