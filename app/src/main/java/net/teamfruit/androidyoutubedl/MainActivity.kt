@@ -58,8 +58,14 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, "nowloading", Toast.LENGTH_SHORT).show()
             } else {
                 when {
-                    !mp.isPlaying -> mp.start()
-                    mp.isPlaying -> mp.pause()
+                    !mp.isPlaying -> {
+                        mp.start()
+                        audioButton.setBackgroundResource(R.drawable.ic_pause_black_24dp)
+                    }
+                    mp.isPlaying -> {
+                        mp.pause()
+                        audioButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp)
+                    }
                 }
             }
             currentTime.text = mToS(mp.currentPosition)
