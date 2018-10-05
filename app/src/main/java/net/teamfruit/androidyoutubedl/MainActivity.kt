@@ -1,9 +1,15 @@
 package net.teamfruit.androidyoutubedl
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.media.MediaPlayer
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.app.NotificationCompat
+import android.support.v4.app.NotificationManagerCompat
 import android.widget.SeekBar
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_audioplay.*
@@ -21,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        createNotificationChannel()
         setMainScreen()
     }
 
@@ -36,6 +43,7 @@ class MainActivity : AppCompatActivity() {
                     textView3.text = getVideoTitle(youtubeUrl)
                     if (audioUrl != null) launch { mp.reset() }.join()
                     audioUrl = getUrlTask(youtubeUrl)
+                    notification()
                     textView2.text = audioUrl
                     mp.setDataSource(audioUrl)
                     mp.prepare()
@@ -101,5 +109,31 @@ class MainActivity : AppCompatActivity() {
             handler.postDelayed(runnable, 100)
         }
         handler.postDelayed(runnable, 100)
+    }
+
+    private fun createNotificationChannel() {
+        val channelId = getString(R.string.channel_id)
+        val name = "test"
+        val description = "description"
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val mChannel = NotificationChannel(channelId, name, importance)
+            mChannel.description = description
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(mChannel)
+        }
+    }
+
+    private fun notification() {
+        val channelId = getString(R.string.channel_id)
+        var mBuilder = NotificationCompat.Builder(this,channelId)
+                .setSmallIcon(R.drawable.notification_template_icon_bg)
+                .setContentTitle("YoutubePlayer")
+                .setContentText("progress complete!")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        with(NotificationManagerCompat.from(this)) {
+            notify(1,mBuilder.build())
+        }
     }
 }

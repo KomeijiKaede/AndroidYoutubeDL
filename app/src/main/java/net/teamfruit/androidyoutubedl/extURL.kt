@@ -48,6 +48,7 @@ tailrec suspend fun getCodecsURL(inputURL:String):String {
     }
     return codecsUrl ?: getCodecsURL(inputURL)
 }
+
 tailrec suspend fun statusCheck(inputURL: String):String {
     val co = async {
         val url = getCodecsURL(inputURL)
