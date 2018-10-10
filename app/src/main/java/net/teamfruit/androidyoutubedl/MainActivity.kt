@@ -99,13 +99,6 @@ class MainActivity : AppCompatActivity() {
         return if (getVideoInfo(inputURL) == "audioURL not found") "audioURL not found" else statusCheck(inputURL)
     }
 
-    private fun mToS(ms: Int): String {
-        val toSec = ms / 1000
-        val min = toSec / 60
-        val sec = toSec % 60
-        return "$min:$sec"
-    }
-
     private fun initSeekBar() {
         seekBar.max = mp.duration
 

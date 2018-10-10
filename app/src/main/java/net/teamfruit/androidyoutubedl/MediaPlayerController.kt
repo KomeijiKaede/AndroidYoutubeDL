@@ -10,8 +10,7 @@ object MediaPlayerController {
         val min = toSec / 60
         val sec = toSec % 60
         val stringSec:String
-        val reg = Regex("""\d\d""")
-        if(!reg.containsMatchIn(sec.toString())) {
+        if(!Regex("""\d\d""").containsMatchIn(sec.toString())) {
             stringSec = "0$sec"
             return "$min:$stringSec"
         } else {}
