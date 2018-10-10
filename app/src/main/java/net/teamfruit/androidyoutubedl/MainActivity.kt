@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-            currentTime.text = mToS(mp.currentPosition)
+            currentTime.text = MediaPlayerController.mToS(mp.currentPosition)
             seekBar.progress = mp.currentPosition
         }
 
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     mp.seekTo(progress)
-                    currentTime.text = mToS(progress)
+                    currentTime.text = MediaPlayerController.mToS(progress)
                 }
             }
 
@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
 
         runnable = Runnable {
             seekBar.progress = mp.currentPosition
-            currentTime.text = mToS(mp.currentPosition)
+            currentTime.text = MediaPlayerController.mToS(mp.currentPosition)
             handler.postDelayed(runnable, 100)
         }
         handler.postDelayed(runnable, 100)
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun notification() {
         val channelId = getString(R.string.channel_id)
-        var mBuilder = NotificationCompat.Builder(this,channelId)
+        val mBuilder = NotificationCompat.Builder(this,channelId)
                 .setSmallIcon(R.drawable.notification_template_icon_bg)
                 .setContentTitle("YoutubePlayer")
                 .setContentText("progress complete!")
