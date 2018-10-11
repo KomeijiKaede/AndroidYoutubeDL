@@ -1,4 +1,4 @@
-package net.teamfruit.androidyoutubedl
+package net.teamfruit.androidyoutubedl.ui
 
 import android.os.Bundle
 import android.os.Handler
@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.fragment_audioplayer.*
+import net.teamfruit.androidyoutubedl.utils.MediaPlayerController
+import net.teamfruit.androidyoutubedl.R
 
 class AudioPlayerFragment : Fragment() {
     private val mp = MediaPlayerController.mp

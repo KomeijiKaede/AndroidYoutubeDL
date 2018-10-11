@@ -1,4 +1,4 @@
-package net.teamfruit.androidyoutubedl
+package net.teamfruit.androidyoutubedl.utils
 
 import android.media.MediaPlayer
 

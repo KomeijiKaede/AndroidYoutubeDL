@@ -39,7 +39,7 @@
             android:textAlignment="center"/>
     <fragment
             android:layout_width="0dp"
-            android:layout_height="wrap_content" android:name="net.teamfruit.androidyoutubedl.AudioPlayerFragment"
+            android:layout_height="wrap_content" android:name="net.teamfruit.androidyoutubedl.ui.AudioPlayerFragment"
             android:id="@+id/fragment"
             tools:layout="@layout/fragment_audioplayer"
             app:layout_constraintStart_toStartOf="parent"
