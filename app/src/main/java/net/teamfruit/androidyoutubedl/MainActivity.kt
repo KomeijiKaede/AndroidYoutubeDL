@@ -13,6 +13,7 @@ import android.support.v4.app.NotificationManagerCompat
 import android.widget.SeekBar
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_audioplay.*
+import kotlinx.android.synthetic.main.fragment_audioplayer.*
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -20,9 +21,7 @@ import kotlinx.coroutines.experimental.launch
 
 class MainActivity : AppCompatActivity() {
     private var audioUrl: String? = null
-    private val mp = MediaPlayer()
-    private lateinit var runnable: Runnable
-    private var handler: Handler = Handler()
+    private val mp = MediaPlayerController.mp
     private var job: Deferred<Unit>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,77 +36,26 @@ class MainActivity : AppCompatActivity() {
         inputUrlButton.setOnClickListener {
             if (inputUrlBox.text != null) {
                 val youtubeUrl = inputUrlBox.text.toString()
+                var title:String?
                 audioUrl = null
                 textView2.text = ""
                 job = async(UI) {
-                    textView3.text = getVideoTitle(youtubeUrl)
+                    title = getVideoTitle(youtubeUrl)
+                    textView3.text = title
                     if (audioUrl != null) launch { mp.reset() }.join()
                     audioUrl = getUrlTask(youtubeUrl)
-                    notification()
+                    notification(title!!)
                     textView2.text = audioUrl
                     mp.setDataSource(audioUrl)
                     mp.prepare()
                     mp.start()
-                    initSeekBar()
                 }
             }
         }
-
-        audioButton.setOnClickListener {
-            if (audioUrl == null) {
-                Toast.makeText(this@MainActivity, "nowloading", Toast.LENGTH_SHORT).show()
-            } else {
-                when {
-                    !mp.isPlaying -> {
-                        mp.start()
-                        audioButton.setBackgroundResource(R.drawable.ic_pause_black_24dp)
-                    }
-                    mp.isPlaying -> {
-                        mp.pause()
-                        audioButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp)
-                    }
-                }
-            }
-            currentTime.text = MediaPlayerController.mToS(mp.currentPosition)
-            seekBar.progress = mp.currentPosition
-        }
-
-        loopButton.setOnClickListener {
-            when (mp.isLooping) {
-                false -> mp.isLooping = true
-                true -> mp.isLooping = false
-            }
-        }
-
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    mp.seekTo(progress)
-                    currentTime.text = MediaPlayerController.mToS(progress)
-                }
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            }
-        })
     }
 
     private suspend fun getUrlTask(inputURL: String): String {
         return if (getVideoInfo(inputURL) == "audioURL not found") "audioURL not found" else statusCheck(inputURL)
-    }
-
-    private fun initSeekBar() {
-        seekBar.max = mp.duration
-
-        runnable = Runnable {
-            seekBar.progress = mp.currentPosition
-            currentTime.text = MediaPlayerController.mToS(mp.currentPosition)
-            handler.postDelayed(runnable, 100)
-        }
-        handler.postDelayed(runnable, 100)
     }
 
     private fun createNotificationChannel() {
@@ -123,12 +71,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun notification() {
+    private fun notification(msg:String) {
         val channelId = getString(R.string.channel_id)
         val mBuilder = NotificationCompat.Builder(this,channelId)
                 .setSmallIcon(R.drawable.notification_template_icon_bg)
                 .setContentTitle("YoutubePlayer")
-                .setContentText("progress complete!")
+                .setContentText(msg)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         with(NotificationManagerCompat.from(this)) {
