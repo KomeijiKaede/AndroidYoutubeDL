@@ -52,8 +52,8 @@ class AudioPlayerFragment : Fragment() {
                     currentTimeView.text = MediaPlayerController.mToS(progress)
                 }
             }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {mp.start()}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {mp.stop()}
         })
     }
 
