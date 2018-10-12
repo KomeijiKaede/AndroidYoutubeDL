@@ -16,6 +16,8 @@ class AudioPlayerFragment : Fragment() {
     private lateinit var runnable: Runnable
     private var handler: Handler = Handler()
 
+    companion object {fun newInstance():AudioPlayerFragment{return AudioPlayerFragment()}}
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_audioplayer, container, false)
     }
@@ -55,7 +57,7 @@ class AudioPlayerFragment : Fragment() {
         })
     }
 
-    private fun initSeekBar() {
+    fun initSeekBar() {
         audioSeekBar.max = mp.duration
 
         runnable = Runnable {

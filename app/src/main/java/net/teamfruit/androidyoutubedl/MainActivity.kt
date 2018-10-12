@@ -7,11 +7,11 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
+import net.teamfruit.androidyoutubedl.ui.AudioPlayerFragment
 import net.teamfruit.androidyoutubedl.utils.ExtractURL
 import net.teamfruit.androidyoutubedl.utils.MediaPlayerController
 
 class MainActivity : AppCompatActivity() {
-    private var audioUrl: String? = null
     private val mp = MediaPlayerController.mp
     private var job: Deferred<Unit>? = null
     private val extUrl = ExtractURL.newInstance()
@@ -23,20 +23,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun setMainScreen() {
         setContentView(R.layout.activity_audioplay)
-
         inputUrlButton.setOnClickListener {
-            if (inputUrlBox.text != null) {
-                val youtubeUrl = inputUrlBox.text.toString()
-                var title: String?
-                audioUrl = null
-                textView2.text = ""
+            val youtubeURL:String
+            var audioURL:String? = null
+            if(inputUrlBox.text != null) {
+                youtubeURL = inputUrlBox.text.toString()
                 job = async(UI) {
-                    title = extUrl.getVideoTitle(youtubeUrl)
-                    textView3.text = title
-                    if (audioUrl != null) launch { mp.reset() }.join()
-                    audioUrl = getUrlTask(youtubeUrl)
-                    textView2.text = audioUrl
-                    mp.setDataSource(audioUrl)
+                    if(audioURL != null) { launch {
+                        mp.reset()
+                        AudioPlayerFragment.newInstance().initSeekBar()
+                    }.join()
+                    }
+                    audioURL = getUrlTask(youtubeURL)
+                    textView3.text = extUrl.getVideoTitle(youtubeURL)
+                    textView2.text = audioURL
+                    mp.setDataSource(audioURL)
                     mp.prepare()
                     mp.start()
                 }
