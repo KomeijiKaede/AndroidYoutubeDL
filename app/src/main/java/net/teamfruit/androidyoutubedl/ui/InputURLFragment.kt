@@ -19,6 +19,8 @@ class InputURLFragment : Fragment(){
     private var job: Deferred<Unit>? = null
     private val extUrl = ExtractURL.newInstance()
 
+    companion object { fun newInstance(): InputURLFragment { return InputURLFragment()} }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_extractor, container, false)
     }
@@ -32,12 +34,12 @@ class InputURLFragment : Fragment(){
                 youtubeURL = inputURLBox.text.toString()
                 job = async(UI) {
                     if(audioURL != null) { launch { mp.reset() }.join() }
-                    audioURL = getUrlTask(youtubeURL)
                     titleView.text = extUrl.getVideoTitle(youtubeURL)
+                    audioURL = getUrlTask(youtubeURL)
                     mp.setDataSource(audioURL)
-                    //AudioPlayerFragment.newInstance().initSeekBar()
                     mp.prepare()
                     mp.start()
+                    //AudioPlayerFragment.newInstance().initSeekBar()
                 }
             }
         }

@@ -5,23 +5,18 @@
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent">
 
-    <fragment
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:name="net.teamfruit.androidyoutubedl.ui.AudioPlayerFragment"
-            android:id="@+id/fragment"
-            tools:layout="@layout/fragment_audioplayer"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-    />
-    <fragment
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:name="net.teamfruit.androidyoutubedl.ui.InputURLFragment"
-            android:id="@+id/fragment2"
-            tools:layout="@layout/fragment_extractor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/fragment"/>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/urlInput">
+
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/controller">
+
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

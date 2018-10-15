@@ -24,16 +24,15 @@ class AudioPlayerFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        initSeekBar()
         playButton.setOnClickListener {
             when(mp.isPlaying) {
                 true -> {
                     mp.pause()
-                    playButton.setBackgroundResource(R.drawable.ic_pause_black_24dp)
+                    playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp)
                 }
                 false -> {
                     mp.start()
-                    playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp)
+                    playButton.setBackgroundResource(R.drawable.ic_pause_black_24dp)
                 }
             }
         }
@@ -52,8 +51,8 @@ class AudioPlayerFragment : Fragment() {
                     currentTimeView.text = MediaPlayerController.mToS(progress)
                 }
             }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {mp.start()}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {mp.stop()}
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
     }
 
