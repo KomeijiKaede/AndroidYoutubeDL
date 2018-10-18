@@ -32,6 +32,7 @@ class AudioPlayerFragment : Fragment() {
                 }
                 false -> {
                     mp.start()
+                    initSeekBar()
                     playButton.setBackgroundResource(R.drawable.ic_pause_black_24dp)
                 }
             }
@@ -56,9 +57,8 @@ class AudioPlayerFragment : Fragment() {
         })
     }
 
-    fun initSeekBar() {
+    private fun initSeekBar() {
         audioSeekBar.max = mp.duration
-
         runnable = Runnable {
             audioSeekBar.progress = mp.currentPosition
             currentTimeView.text = MediaPlayerController.mToS(mp.currentPosition)

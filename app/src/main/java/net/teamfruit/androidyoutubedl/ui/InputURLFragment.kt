@@ -9,7 +9,6 @@ import kotlinx.android.synthetic.main.fragment_extractor.*
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
 import net.teamfruit.androidyoutubedl.R
 import net.teamfruit.androidyoutubedl.utils.ExtractURL
 import net.teamfruit.androidyoutubedl.utils.MediaPlayerController
@@ -32,14 +31,12 @@ class InputURLFragment : Fragment(){
             var audioURL:String? = null
             if(inputButton.text != null) {
                 youtubeURL = inputURLBox.text.toString()
+                if(audioURL != null){mp.reset()}
                 job = async(UI) {
-                    if(audioURL != null) { launch { mp.reset() }.join() }
-                    titleView.text = extUrl.getVideoTitle(youtubeURL)
                     audioURL = getUrlTask(youtubeURL)
+                    titleView.text = extUrl.getVideoTitle(youtubeURL)
                     mp.setDataSource(audioURL)
                     mp.prepare()
-                    mp.start()
-                    //AudioPlayerFragment.newInstance().initSeekBar()
                 }
             }
         }
