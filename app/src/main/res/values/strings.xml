@@ -3,5 +3,5 @@
     <string name="textView">response</string>
     <string name="button">enter</string>
     <string name="EditText"/>
-    <string name="channel_id">Test</string>
+    <string name="channel_name">Process</string>
 </resources>

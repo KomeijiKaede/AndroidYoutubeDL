@@ -34,7 +34,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.26.0'
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.26.0'
 
@@ -61,4 +61,5 @@ dependencies {
     compile "org.jetbrains.anko:anko-support-v4:$anko_version"
     // ConstraintLayout
     compile "org.jetbrains.anko:anko-constraint-layout:$anko_version"
+    compile "org.jetbrains.anko:anko-sqlite:$anko_version"
 }

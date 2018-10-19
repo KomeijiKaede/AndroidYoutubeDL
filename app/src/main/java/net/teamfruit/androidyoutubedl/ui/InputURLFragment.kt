@@ -18,7 +18,7 @@ class InputURLFragment : Fragment(){
     private var job: Deferred<Unit>? = null
     private val extUrl = ExtractURL.newInstance()
 
-    companion object { fun newInstance(): InputURLFragment { return InputURLFragment()} }
+    companion object { fun newInstance(): InputURLFragment { return InputURLFragment() } }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_extractor, container, false)
@@ -40,6 +40,8 @@ class InputURLFragment : Fragment(){
                 }
             }
         }
+
+
     }
 
     private suspend fun getUrlTask(inputURL: String): String {

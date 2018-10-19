@@ -7,6 +7,14 @@
 
     <RelativeLayout
             android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/listView"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="80dp"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="170dp">
+
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/urlInput">
