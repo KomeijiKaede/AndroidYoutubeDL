@@ -4,21 +4,22 @@ import android.content.Context
 import android.support.v4.app.Fragment
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import net.teamfruit.androidyoutubedl.R
 import net.teamfruit.androidyoutubedl.db.DBOpenHelper
 import net.teamfruit.androidyoutubedl.db.ListData
 import net.teamfruit.androidyoutubedl.db.ListDataParser
+import net.teamfruit.androidyoutubedl.utils.MediaPlayerController
 import org.jetbrains.anko.db.select
-
 
 class MusicListFragment: Fragment(), RecyclerViewHolder.ItemClickLister {
     private val listContents = mutableListOf<ListData>()
     private lateinit var appContext: Context
+    private val mp = MediaPlayerController.mp
 
     companion object {fun newInstance(): MusicListFragment {return MusicListFragment()}}
 
@@ -41,6 +42,11 @@ class MusicListFragment: Fragment(), RecyclerViewHolder.ItemClickLister {
     }
 
     override fun onItemClick(view: View, position: Int) {
-        Toast.makeText(appContext, "position $position was tapped", Toast.LENGTH_SHORT).show()
+        val helper = DBOpenHelper.newInstance(appContext)
+        val dataList = helper.readableDatabase.select(DBOpenHelper.tableName).parseList(ListDataParser())
+        mp.reset()
+        mp.setDataSource(dataList[position].url)
+        mp.prepare()
+        mp.start()
     }
 }

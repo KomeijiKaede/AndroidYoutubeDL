@@ -1,5 +1,6 @@
 package net.teamfruit.androidyoutubedl.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
@@ -10,13 +11,18 @@ import android.widget.SeekBar
 import kotlinx.android.synthetic.main.fragment_audioplayer.*
 import net.teamfruit.androidyoutubedl.utils.MediaPlayerController
 import net.teamfruit.androidyoutubedl.R
-
 class AudioPlayerFragment : Fragment() {
     private val mp = MediaPlayerController.mp
     private lateinit var runnable: Runnable
     private var handler: Handler = Handler()
+    private lateinit var appContext:Context
 
     companion object {fun newInstance():AudioPlayerFragment{return AudioPlayerFragment()}}
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appContext = context
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_audioplayer, container, false)
