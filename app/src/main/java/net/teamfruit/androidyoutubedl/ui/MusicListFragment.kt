@@ -4,17 +4,20 @@ import android.content.Context
 import android.support.v4.app.Fragment
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import net.teamfruit.androidyoutubedl.R
+import net.teamfruit.androidyoutubedl.db.DBOpenHelper
+import net.teamfruit.androidyoutubedl.db.ListData
+import net.teamfruit.androidyoutubedl.db.ListDataParser
+import org.jetbrains.anko.db.select
 
 
 class MusicListFragment: Fragment(), RecyclerViewHolder.ItemClickLister {
-    private val listContents = mutableListOf<String>()
+    private val listContents = mutableListOf<ListData>()
     private lateinit var appContext: Context
 
     companion object {fun newInstance(): MusicListFragment {return MusicListFragment()}}
@@ -30,10 +33,9 @@ class MusicListFragment: Fragment(), RecyclerViewHolder.ItemClickLister {
 
     override fun onResume() {
         super.onResume()
-        Log.d("www","www")
-        for(i in 0..30){
-            listContents.add("www")
-        }
+        val helper = DBOpenHelper.newInstance(appContext)
+        val dataList = helper.readableDatabase.select(DBOpenHelper.tableName).parseList(ListDataParser())
+        listContents.addAll(dataList)
         mainRecyclerView.adapter = RecyclerAdapter(appContext, this, listContents)
         mainRecyclerView.layoutManager = LinearLayoutManager(appContext, LinearLayoutManager.VERTICAL, false)
     }
