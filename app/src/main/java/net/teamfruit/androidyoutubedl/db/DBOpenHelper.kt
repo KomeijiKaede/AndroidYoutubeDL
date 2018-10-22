@@ -16,7 +16,7 @@ class DBOpenHelper(context: Context):ManagedSQLiteOpenHelper(context,"MusicList"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        db?.run { createTable(tableName, ifNotExists = true, columns = *arrayOf("title" to TEXT, "url" to TEXT))}
+        db?.run { createTable(tableName, ifNotExists = true, columns = *arrayOf("title" to TEXT, "url" to TEXT, "originURL" to TEXT))}
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {

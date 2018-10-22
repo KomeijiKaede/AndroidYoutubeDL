@@ -35,7 +35,6 @@ class RecyclerAdapter(private val context: Context, private val itemClickListene
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
-
         val layoutInflater = LayoutInflater.from(context)
         val mView = layoutInflater.inflate(R.layout.list_item, parent, false)
 
@@ -43,6 +42,14 @@ class RecyclerAdapter(private val context: Context, private val itemClickListene
             mRecyclerView?.let {
                 itemClickListener.onItemClick(view, it.getChildAdapterPosition(view))
             }
+            return@setOnClickListener
+        }
+
+        mView.setOnLongClickListener { view ->
+            mRecyclerView?.let {
+                itemClickListener.onLongItemClick(view, it.getChildAdapterPosition(view))
+            }
+            return@setOnLongClickListener true
         }
 
         return RecyclerViewHolder(mView)

@@ -8,9 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_audioplayer.*
 import net.teamfruit.androidyoutubedl.utils.MediaPlayerController
 import net.teamfruit.androidyoutubedl.R
+
 class AudioPlayerFragment : Fragment() {
     private val mp = MediaPlayerController.mp
     private lateinit var runnable: Runnable
@@ -46,8 +48,14 @@ class AudioPlayerFragment : Fragment() {
 
         repeatButton.setOnClickListener {
             when (mp.isLooping) {
-                false -> mp.isLooping = true
-                true -> mp.isLooping = false
+                false -> {
+                    mp.isLooping = true
+                    Toast.makeText(appContext, "looping", Toast.LENGTH_SHORT).show()
+                }
+                true -> {
+                    mp.isLooping = false
+                    Toast.makeText(appContext, "not looping", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 

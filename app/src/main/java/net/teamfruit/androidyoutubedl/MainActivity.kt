@@ -2,6 +2,7 @@ package net.teamfruit.androidyoutubedl
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import kotlinx.android.synthetic.main.activity_mainmenu.*
 import net.teamfruit.androidyoutubedl.ui.*
 
 class MainActivity : AppCompatActivity() {
@@ -9,15 +10,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_audioplay)
+        setContentView(R.layout.activity_mainmenu)
 
-        if (savedInstanceState == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.controller, AudioPlayerFragment.newInstance())
-                    .add(R.id.urlInput, InputURLFragment.newInstance())
-                    .add(R.id.listView, MusicListFragment.newInstance())
-                    .commit()
-        }
+        if (savedInstanceState == null) { supportFragmentManager.beginTransaction().add(R.id.controller, AudioPlayerFragment.newInstance()).commit() }
+
+        viewPager.adapter = TabPagerAdapter(supportFragmentManager)
+        tabLayout.setupWithViewPager(viewPager)
     }
 }

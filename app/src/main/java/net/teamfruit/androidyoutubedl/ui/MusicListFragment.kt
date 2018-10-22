@@ -1,24 +1,28 @@
 package net.teamfruit.androidyoutubedl.ui
 
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
 import android.support.v4.app.Fragment
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.activity_main.*
+import android.widget.Toast
+import kotlinx.android.synthetic.main.fragment_listview.*
 import net.teamfruit.androidyoutubedl.R
 import net.teamfruit.androidyoutubedl.db.DBOpenHelper
 import net.teamfruit.androidyoutubedl.db.ListData
 import net.teamfruit.androidyoutubedl.db.ListDataParser
 import net.teamfruit.androidyoutubedl.utils.MediaPlayerController
+import org.jetbrains.anko.db.SelectQueryBuilder
 import org.jetbrains.anko.db.select
+import java.lang.Exception
 
 class MusicListFragment: Fragment(), RecyclerViewHolder.ItemClickLister {
-    private val listContents = mutableListOf<ListData>()
     private lateinit var appContext: Context
+    private lateinit var helper: SQLiteDatabase
+    private lateinit var dataList: List<ListData>
     private val mp = MediaPlayerController.mp
 
     companion object {fun newInstance(): MusicListFragment {return MusicListFragment()}}
@@ -26,6 +30,8 @@ class MusicListFragment: Fragment(), RecyclerViewHolder.ItemClickLister {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         appContext = context
+        helper = DBOpenHelper.newInstance(appContext).writableDatabase
+        dataList = helper.select(DBOpenHelper.tableName).parseList(ListDataParser())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -34,19 +40,30 @@ class MusicListFragment: Fragment(), RecyclerViewHolder.ItemClickLister {
 
     override fun onResume() {
         super.onResume()
-        val helper = DBOpenHelper.newInstance(appContext)
-        val dataList = helper.readableDatabase.select(DBOpenHelper.tableName).parseList(ListDataParser())
-        listContents.addAll(dataList)
-        mainRecyclerView.adapter = RecyclerAdapter(appContext, this, listContents)
+        mainRecyclerView.adapter = RecyclerAdapter(appContext, this, dataList)
         mainRecyclerView.layoutManager = LinearLayoutManager(appContext, LinearLayoutManager.VERTICAL, false)
+
+        /*helper.beginTransaction()
+        try {
+            helper.delete(DBOpenHelper.tableName, null, null)
+            helper.setTransactionSuccessful()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            helper.endTransaction()
+        }*/
     }
 
     override fun onItemClick(view: View, position: Int) {
-        val helper = DBOpenHelper.newInstance(appContext)
-        val dataList = helper.readableDatabase.select(DBOpenHelper.tableName).parseList(ListDataParser())
         mp.reset()
         mp.setDataSource(dataList[position].url)
         mp.prepare()
-        mp.start()
+        Toast.makeText(appContext, dataList[position].title, Toast.LENGTH_SHORT).show()
     }
+
+    override fun onLongItemClick(view: View, position: Int) {
+        Toast.makeText(appContext, dataList[position].originURL, Toast.LENGTH_SHORT).show()
+    }
+
+
 }

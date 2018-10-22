@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_extractor.*
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
@@ -35,26 +36,11 @@ class InputURLFragment : Fragment(){
 
     override fun onResume() {
         super.onResume()
-        /*inputButton.setOnClickListener {
-            val youtubeURL:String
-            var audioURL:String? = null
-
-            if(inputButton.text != null) {
-                youtubeURL = inputURLBox.text.toString()
-                if(audioURL != null){mp.reset()}
-                job = async(UI) {
-                    audioURL = getUrlTask(youtubeURL)
-                    titleView.text = extUrl.getVideoTitle(youtubeURL)
-                    mp.setDataSource(audioURL)
-                    mp.prepare()
-                }
-            }
-        }*/
 
         inputButton.setOnClickListener {
             val youtubeURL:String
-            var audioURL:String? = null
-            var title:String? = null
+            var audioURL: String?
+            var title:String?
             val helper = DBOpenHelper.newInstance(appContext)
 
             if(inputURLBox.text != null) {
@@ -64,8 +50,9 @@ class InputURLFragment : Fragment(){
                     title = extUrl.getVideoTitle(youtubeURL)
                     titleView.text = title
                     helper.use {
-                        insert(DBOpenHelper.tableName, *arrayOf("title" to title, "url" to audioURL))
+                        insert(DBOpenHelper.tableName, "title" to title, "url" to audioURL, "originURL" to youtubeURL)
                     }
+                    Toast.makeText(appContext, "added", Toast.LENGTH_SHORT).show()
                     mp.setDataSource(audioURL)
                     mp.prepare()
                 }

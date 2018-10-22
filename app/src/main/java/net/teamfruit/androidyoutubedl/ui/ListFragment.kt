@@ -9,6 +9,7 @@ import net.teamfruit.androidyoutubedl.R
 class RecyclerViewHolder(view: View): RecyclerView.ViewHolder(view) {
     interface ItemClickLister {
         fun onItemClick(view: View,position: Int)
+        fun onLongItemClick(view: View,position: Int)
     }
 
     val itemTextView: TextView = view.findViewById(R.id.itemTextView)
