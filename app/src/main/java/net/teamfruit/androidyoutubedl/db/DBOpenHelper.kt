@@ -8,7 +8,7 @@ import org.jetbrains.anko.db.createTable
 
 class DBOpenHelper(context: Context):ManagedSQLiteOpenHelper(context,"MusicList",null,1) {
     companion object {
-        val tableName = "list"
+        const val tableName = "list"
         private var instance :DBOpenHelper? = null
 
         fun newInstance(context: Context):DBOpenHelper{return instance ?: DBOpenHelper(context.applicationContext)

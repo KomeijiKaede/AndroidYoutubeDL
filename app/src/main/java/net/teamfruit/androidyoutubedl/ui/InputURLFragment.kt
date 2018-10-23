@@ -49,12 +49,12 @@ class InputURLFragment : Fragment(){
                     audioURL = getUrlTask(youtubeURL)
                     title = extUrl.getVideoTitle(youtubeURL)
                     titleView.text = title
-                    helper.use {
-                        insert(DBOpenHelper.tableName, "title" to title, "url" to audioURL, "originURL" to youtubeURL)
-                    }
+                    if(audioURL == "audioURL not found") { titleView.text = audioURL }
+                    helper.use { insert(DBOpenHelper.tableName, "title" to title, "url" to audioURL, "originURL" to youtubeURL) }
                     Toast.makeText(appContext, "added", Toast.LENGTH_SHORT).show()
                     mp.setDataSource(audioURL)
                     mp.prepare()
+                    mp.start()
                 }
             }
         }

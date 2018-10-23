@@ -6,8 +6,6 @@ import kotlinx.android.synthetic.main.activity_mainmenu.*
 import net.teamfruit.androidyoutubedl.ui.*
 
 class MainActivity : AppCompatActivity() {
-    companion object { fun newInstance(): MainActivity { return MainActivity() } }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mainmenu)

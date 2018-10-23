@@ -1,9 +1,11 @@
 package net.teamfruit.androidyoutubedl.ui
 
 import android.content.Context
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +42,6 @@ class AudioPlayerFragment : Fragment() {
                 }
                 false -> {
                     mp.start()
-                    initSeekBar()
                     playButton.setBackgroundResource(R.drawable.ic_pause_black_24dp)
                 }
             }
@@ -69,6 +70,13 @@ class AudioPlayerFragment : Fragment() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
+
+        mp.setOnPreparedListener {
+            if(mp.isPlaying) {
+                playButton.setBackgroundResource(R.drawable.ic_pause_black_24dp)
+            }
+            initSeekBar()
+        }
     }
 
     private fun initSeekBar() {
