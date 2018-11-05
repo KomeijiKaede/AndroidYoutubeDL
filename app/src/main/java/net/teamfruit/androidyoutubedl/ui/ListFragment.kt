@@ -14,8 +14,4 @@ class RecyclerViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
     val itemTextView: TextView = view.findViewById(R.id.itemTextView)
     val itemImageView: ImageView = view.findViewById(R.id.itemImageView)
-
-    init {
-
-    }
 }

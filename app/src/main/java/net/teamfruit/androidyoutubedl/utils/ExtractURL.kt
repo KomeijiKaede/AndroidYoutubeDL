@@ -5,7 +5,7 @@ import kotlinx.coroutines.experimental.async
 import java.net.URLDecoder
 
 class ExtractURL {
-    companion object { fun newInstance() : ExtractURL {return ExtractURL()} }
+    companion object { fun newInstance() : ExtractURL {return ExtractURL() }}
 
     suspend fun getVideoInfo(inputURL: String):String {
         val getVideoInfo = async {
@@ -62,6 +62,18 @@ class ExtractURL {
         }.await()
         for(i in 0..5) if(co != null) return co
         return statusCheck(inputURL)
+    }
+
+    suspend fun checkURL(audioURL: String, inputURL: String):String {
+        return async {
+            return@async if(audioURL.httpGet().response().second.statusCode == 403) {
+                getUrlTask(inputURL)
+            } else { audioURL }
+        }.await()
+    }
+
+    suspend fun getUrlTask(inputURL: String): String {
+        return if (getVideoInfo(inputURL) == "audioURL not found") "audioURL not found" else statusCheck(inputURL)
     }
 }
 

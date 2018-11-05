@@ -16,4 +16,11 @@ object MediaPlayerController {
         } else {}
         return "$min:$sec"
     }
+
+    fun prepareStart(audioURL:String) {
+        mp.reset()
+        mp.setDataSource(audioURL)
+        mp.prepare()
+        mp.start()
+    }
 }

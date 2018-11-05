@@ -9,7 +9,7 @@ class TabPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         return when(position) {
             0 -> MusicListFragment.newInstance()
-            1 -> InputURLFragment.newInstance()
+            1 -> InputURLFragment.newInstance()//DBControllerFragment.newInstance()
             else -> MusicListFragment.newInstance()
         }
     }

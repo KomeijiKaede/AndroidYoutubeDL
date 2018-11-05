@@ -1,14 +1,16 @@
 package net.teamfruit.androidyoutubedl.db
 
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.BaseAdapter
 import android.widget.TextView
 import net.teamfruit.androidyoutubedl.R
 import org.jetbrains.anko.layoutInflater
 
-class DBListAdapter: ArrayAdapter<ListData> {
+/*class DBListAdapter: ArrayAdapter<ListData> {
     constructor(context: Context, resource: Int) : super(context, resource)
     constructor(context: Context, resource: Int, textViewResourceId: Int) : super(context, resource, textViewResourceId)
     constructor(context: Context, resource: Int, objects: Array<out ListData>?) : super(context, resource, objects)
@@ -25,4 +27,4 @@ class DBListAdapter: ArrayAdapter<ListData> {
         }
         return newView
     }
-}
+}*/

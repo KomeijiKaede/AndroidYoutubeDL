@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.github.kittinunf.fuel.httpGet
 import kotlinx.android.synthetic.main.fragment_listview.*
 import kotlinx.coroutines.experimental.Deferred
@@ -19,13 +18,15 @@ import net.teamfruit.androidyoutubedl.db.ListData
 import net.teamfruit.androidyoutubedl.db.ListDataParser
 import net.teamfruit.androidyoutubedl.utils.ExtractURL
 import net.teamfruit.androidyoutubedl.utils.MediaPlayerController
+import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.select
+import org.jetbrains.anko.db.update
 
 class MusicListFragment: Fragment(), RecyclerViewHolder.ItemClickLister {
     private lateinit var appContext: Context
     private lateinit var helper: SQLiteDatabase
     private lateinit var dataList: List<ListData>
-    private val mp = MediaPlayerController.mp
+    private val mp = MediaPlayerController
     private var job: Deferred<Unit>? = null
     private val extUrl = ExtractURL.newInstance()
 
@@ -49,30 +50,22 @@ class MusicListFragment: Fragment(), RecyclerViewHolder.ItemClickLister {
     }
 
     override fun onItemClick(view: View, position: Int) {
-        mp.reset()
-        mp.setDataSource(dataList[position].url)
-        mp.prepare()
-        mp.start()
-        Toast.makeText(appContext, dataList[position].title, Toast.LENGTH_SHORT).show()
+        job = async { mp.prepareStart(checkURL(dataList[position].url!!, dataList[position].originURL!!)) }
     }
 
     override fun onLongItemClick(view: View, position: Int) {
-        val data = dataList[position]
-        var audioURL: String? = null
-        mp.reset()
-        job = async {
-            audioURL = checkURL(data.url!!, data.originURL!!)
-            mp.setDataSource(audioURL)
-            mp.prepare()
-            mp.start()
-        }
+        helper.delete(DBOpenHelper.tableName, "title = {key}", "key" to dataList[position])
     }
 
-    private suspend fun checkURL(audioURL: String, inputURL: String):String {
+    private suspend fun checkURL(url: String, originURL: String): String {
         return async {
-            return@async if(audioURL.httpGet().response().second.statusCode == 403) {
-                getUrlTask(inputURL)
-            } else { audioURL }
+            if(url.httpGet().response().second.statusCode == 403) {
+                val newUrl = getUrlTask(originURL)
+                helper.update(DBOpenHelper.tableName, "url" to newUrl)
+                        .`whereSimple`("originURL = ?", originURL)
+                        .exec()
+                return@async newUrl
+            } else return@async url
         }.await()
     }
 
