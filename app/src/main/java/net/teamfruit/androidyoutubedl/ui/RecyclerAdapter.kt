@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import net.teamfruit.androidyoutubedl.R
 import net.teamfruit.androidyoutubedl.db.ListData
 
-class RecyclerAdapter(private val context: Context, private val itemClickListener: RecyclerViewHolder.ItemClickLister, private val itemList: List<ListData>) : RecyclerView.Adapter<RecyclerViewHolder>() {
+class RecyclerAdapter(private val context: Context, private val itemClickListener: RecyclerViewHolder.ItemClickLister, private val itemList: MutableList<String>) : RecyclerView.Adapter<RecyclerViewHolder>() {
 
     private var mRecyclerView : RecyclerView? = null
 
@@ -23,7 +23,7 @@ class RecyclerAdapter(private val context: Context, private val itemClickListene
     }
 
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
-        val text: String? = if(itemList[position].title == null) "null" else itemList[position].title
+        val text: String? = itemList[position]
         holder.let {
             it.itemTextView.text = text
             it.itemImageView.setImageResource(R.mipmap.ic_launcher)
