@@ -18,9 +18,18 @@ object MediaPlayerController {
     }
 
     fun prepareStart(audioURL:String) {
-        mp.reset()
-        mp.setDataSource(audioURL)
-        mp.prepare()
-        mp.start()
+        fun prepare() {
+            mp.reset()
+            mp.setDataSource(audioURL)
+            mp.prepare()
+            mp.start()
+        }
+        when(mp.isLooping) {
+            true -> {
+                prepare()
+                mp.isLooping = true
+            }
+            false -> prepare()
+        }
     }
 }
